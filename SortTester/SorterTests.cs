@@ -17,6 +17,26 @@ namespace SortTester
         public void Setup() {
         }
 
+        #region InsertionSort
+        [TestCaseSource(nameof(IntArrays))]
+        public void IntInsertionSortTest(int[] intArray) {
+            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
+
+            Span<int> intSpan = unsortedInts.AsSpan();
+            Sorter.InsertionSort(intSpan);
+            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
+        }
+
+        [TestCaseSource(nameof(CharArrays))]
+        public void CharInsertionSortTest(char[] charArray) {
+            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
+
+            Span<char> charSpan = unsortedChars.AsSpan();
+            Sorter.InsertionSort(charSpan);
+            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
+        }
+        #endregion
+
         #region BubbleSort
         [TestCaseSource(nameof(IntArrays))]
         public void IntBubbleSortTest(int[] intArray) {
