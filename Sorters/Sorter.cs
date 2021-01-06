@@ -6,10 +6,6 @@ namespace Sorters
 {
     public partial class Sorter
     {
-        public static void MergeSort<T>(Span<T> span) where T : IComparable<T> {
-
-        }
-
         public static void QuickSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
@@ -31,6 +27,10 @@ namespace Sorters
         }
 
         public static void TreeSort<T>(Span<T> span) where T : IComparable<T> {
+
+        }
+
+        public static void BlockSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
     }

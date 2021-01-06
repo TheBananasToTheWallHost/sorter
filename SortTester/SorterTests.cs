@@ -17,6 +17,26 @@ namespace SortTester
         public void Setup() {
         }
 
+        #region MergeSort
+        [TestCaseSource(nameof(IntArrays))]
+        public void IntMergeSortTest(int[] intArray) {
+            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
+
+            Span<int> intSpan = unsortedInts.AsSpan();
+            Sorter.MergeSort(intSpan);
+            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
+        }
+
+        [TestCaseSource(nameof(CharArrays))]
+        public void CharMergeSortTest(char[] charArray) {
+            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
+
+            Span<char> charSpan = unsortedChars.AsSpan();
+            Sorter.MergeSort(charSpan);
+            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
+        }
+        #endregion
+
         #region InsertionSort
         [TestCaseSource(nameof(IntArrays))]
         public void IntInsertionSortTest(int[] intArray) {
