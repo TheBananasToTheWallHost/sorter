@@ -15,13 +15,9 @@ namespace SortTester
 
         [SetUp]
         public void Setup() {
-            unsortedChars = new char[] { 'a', 'b', 'm', 'z', ';', 'w', '!', '%', '+', 'C', 'K', 'P' };
-            sortedChars = new char[unsortedChars.Length];
-            unsortedChars.CopyTo(sortedChars, 0);
-            
-            Array.Sort(sortedChars);
         }
 
+        #region BubbleSort
         [TestCaseSource(nameof(IntArrays))]
         public void IntBubbleSortTest(int[] intArray) {
             PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
@@ -29,7 +25,6 @@ namespace SortTester
             Span<int> intSpan = unsortedInts.AsSpan();
             Sorter.BubbleSort(intSpan);
             Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-            //Span<char> charSpan = unsortedChars.AsSpan();
         }
 
         [TestCaseSource(nameof(CharArrays))]
@@ -40,15 +35,29 @@ namespace SortTester
             Sorter.BubbleSort(charSpan);
             Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
         }
+        #endregion
 
-        private void PrepareTestArrays<T>(T[] dataArray, out T[] sortedArray, out T[] unsortedArray) {
-            unsortedArray = new T[dataArray.Length];
-            sortedArray = new T[dataArray.Length];
-            dataArray.CopyTo(unsortedArray, 0);
-            dataArray.CopyTo(sortedArray, 0);
-            Array.Sort(sortedArray);
+        #region SelectionSort
+        [TestCaseSource(nameof(IntArrays))]
+        public void IntSelectionSortTest(int[] intArray) {
+            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
+
+            Span<int> intSpan = unsortedInts.AsSpan();
+            Sorter.SelectionSort(intSpan);
+            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
         }
 
+        [TestCaseSource(nameof(CharArrays))]
+        public void CharSelectionSortTest(char[] charArray) {
+            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
+
+            Span<char> charSpan = unsortedChars.AsSpan();
+            Sorter.SelectionSort(charSpan);
+            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
+        }
+        #endregion
+
+        #region Data
         private static object[] IntArrays = {
             new int[] {},
             new int[] { 1, 5, 3, 6, 7, 34, 2, 121, 34, 76, 5, 4, 32, 87, 6, 5, 9 },
@@ -64,5 +73,16 @@ namespace SortTester
             new char[] { 'a', 'b', 'm', 'z', ';', 'w', '!', '%', '+', 'C', 'K', 'P' },
             new char[] {}
         };
+        #endregion
+        
+        #region Helpers
+        private void PrepareTestArrays<T>(T[] dataArray, out T[] sortedArray, out T[] unsortedArray) {
+            unsortedArray = new T[dataArray.Length];
+            sortedArray = new T[dataArray.Length];
+            dataArray.CopyTo(unsortedArray, 0);
+            dataArray.CopyTo(sortedArray, 0);
+            Array.Sort(sortedArray);
+        }
+        #endregion
     }
 }
