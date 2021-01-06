@@ -7,8 +7,7 @@ using System.Linq;
 
 namespace SortTester
 {
-    public class SorterTests
-    {
+    public class SorterTests {
         public delegate void SortMethodDelegate<T>(Span<T> span);
 
         int[] unsortedInts;
@@ -20,17 +19,8 @@ namespace SortTester
         public void Setup() {
         }
 
-        [Test]
-        public void IntSortTest([ValueSource(nameof(IntArrays))] int[] intArray, [ValueSource(nameof(IntSortingMethods))] SortMethodDelegate<int> sortMethod) {
-            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
-
-            Span<int> intSpan = unsortedInts.AsSpan();
-            sortMethod(intSpan);
-            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-        }
-
         [TestCaseSource(nameof(IntSortingTestCases))]
-        public void IntSortTest2(int[] intArray, SortMethodDelegate<int> sortMethod) {
+        public void IntSortTest(int[] intArray, SortMethodDelegate<int> sortMethod) {
             PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
 
             Span<int> intSpan = unsortedInts.AsSpan();
@@ -38,85 +28,15 @@ namespace SortTester
             Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
         }
 
-        #region MergeSort
-        [TestCaseSource(nameof(IntArrays))]
-        public void IntMergeSortTest(int[] intArray) {
-            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
-
-            Span<int> intSpan = unsortedInts.AsSpan();
-            Sorter.MergeSort(intSpan);
-            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-        }
-
-        [TestCaseSource(nameof(CharArrays))]
-        public void CharMergeSortTest(char[] charArray) {
+        [TestCaseSource(nameof(CharSortingTestCases))]
+        public void CharSortTest(char[] charArray, SortMethodDelegate<char> sortMethod) {
             PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
 
             Span<char> charSpan = unsortedChars.AsSpan();
-            Sorter.MergeSort(charSpan);
+            sortMethod(charSpan);
             Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
         }
-        #endregion
 
-        #region InsertionSort
-        [TestCaseSource(nameof(IntArrays))]
-        public void IntInsertionSortTest(int[] intArray) {
-            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
-
-            Span<int> intSpan = unsortedInts.AsSpan();
-            Sorter.InsertionSort(intSpan);
-            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-        }
-
-        [TestCaseSource(nameof(CharArrays))]
-        public void CharInsertionSortTest(char[] charArray) {
-            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
-
-            Span<char> charSpan = unsortedChars.AsSpan();
-            Sorter.InsertionSort(charSpan);
-            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
-        }
-        #endregion
-
-        #region BubbleSort
-        [TestCaseSource(nameof(IntArrays))]
-        public void IntBubbleSortTest(int[] intArray) {
-            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
-
-            Span<int> intSpan = unsortedInts.AsSpan();
-            Sorter.BubbleSort(intSpan);
-            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-        }
-
-        [TestCaseSource(nameof(CharArrays))]
-        public void CharBubbleSortTest(char[] charArray) {
-            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
-
-            Span<char> charSpan = unsortedChars.AsSpan();
-            Sorter.BubbleSort(charSpan);
-            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
-        }
-        #endregion
-
-        #region SelectionSort
-        [TestCaseSource(nameof(IntArrays))]
-        public void IntSelectionSortTest(int[] intArray) {
-            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
-
-            Span<int> intSpan = unsortedInts.AsSpan();
-            Sorter.SelectionSort(intSpan);
-            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
-        }
-
-        [TestCaseSource(nameof(CharArrays))]
-        public void CharSelectionSortTest(char[] charArray) {
-            PrepareTestArrays(charArray, out sortedChars, out unsortedChars);
-
-            Span<char> charSpan = unsortedChars.AsSpan();
-            Sorter.SelectionSort(charSpan);
-            Assert.IsTrue(unsortedChars.SequenceEqual(sortedChars));
-        }
-        #endregion
 
         #region Data
         private static object[] IntArrays = {
@@ -135,25 +55,34 @@ namespace SortTester
             new char[] {}
         };
 
-        private static SortMethodDelegate<int>[] IntSortingMethods = {
-            Sorter.BubbleSort,
-            Sorter.MergeSort,
-            Sorter.InsertionSort,
-            Sorter.SelectionSort
-        };
-
-        private static IEnumerable IntSortingTestCases {
-            get {
-                for (int i = 0; i < IntArrays.Length; i++) {
-                    for (int j = 0; j < IntSortingMethods.Length; j++) {
-                        yield return new TestCaseData(IntArrays[i], IntSortingMethods[j])
-                            .SetName("{m}: {0}, " + IntSortingMethods[j].Method.Name)
-                            .SetDescription($"Sorts integers using {IntSortingMethods[j].Method.Name}")
-                            .SetCategory($"{IntSortingMethods[j].Method.Name}")
-                            .SetCategory("Integers");
-                    }
+        private static IEnumerable<TestCaseData> TypeSortingTestCases<T>(object[] array) where T : IComparable<T> {
+            Type type = typeof(T);
+            for (int i = 0; i < array.Length; i++) {
+                foreach (var sortMethod in GetSortingMethods<T>()) {
+                    yield return new TestCaseData(array[i], sortMethod)
+                        .SetName("{m}: {0}, " + sortMethod.Method.Name)
+                        .SetDescription($"Sorts integers using {sortMethod.Method.Name}")
+                        .SetCategory($"{sortMethod.Method.Name}")
+                        .SetCategory($"{type.Name}");
                 }
             }
+        }
+
+        private static IEnumerable<SortMethodDelegate<T>> GetSortingMethods<T>() where T : IComparable<T> {
+            yield return Sorter.BubbleSort;
+            yield return Sorter.MergeSort;
+            yield return Sorter.InsertionSort;
+            yield return Sorter.SelectionSort;
+        }
+        #endregion
+
+        #region Test Data Helpers
+        private static IEnumerable CharSortingTestCases() {
+            return TypeSortingTestCases<char>(CharArrays);
+        }
+
+        private static IEnumerable IntSortingTestCases() {
+            return TypeSortingTestCases<int>(IntArrays);
         }
         #endregion
 
