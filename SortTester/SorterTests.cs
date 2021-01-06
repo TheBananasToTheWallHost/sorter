@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Sorters;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +9,8 @@ namespace SortTester
 {
     public class SorterTests
     {
+        public delegate void SortMethodDelegate<T>(Span<T> span);
+
         int[] unsortedInts;
         int[] sortedInts;
         char[] unsortedChars;
@@ -15,6 +18,24 @@ namespace SortTester
 
         [SetUp]
         public void Setup() {
+        }
+
+        [Test]
+        public void IntSortTest([ValueSource(nameof(IntArrays))] int[] intArray, [ValueSource(nameof(IntSortingMethods))] SortMethodDelegate<int> sortMethod) {
+            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
+
+            Span<int> intSpan = unsortedInts.AsSpan();
+            sortMethod(intSpan);
+            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
+        }
+
+        [TestCaseSource(nameof(IntSortingTestCases))]
+        public void IntSortTest2(int[] intArray, SortMethodDelegate<int> sortMethod) {
+            PrepareTestArrays(intArray, out sortedInts, out unsortedInts);
+
+            Span<int> intSpan = unsortedInts.AsSpan();
+            sortMethod(intSpan);
+            Assert.IsTrue(unsortedInts.SequenceEqual(sortedInts));
         }
 
         #region MergeSort
@@ -113,8 +134,29 @@ namespace SortTester
             new char[] { 'a', 'b', 'm', 'z', ';', 'w', '!', '%', '+', 'C', 'K', 'P' },
             new char[] {}
         };
+
+        private static SortMethodDelegate<int>[] IntSortingMethods = {
+            Sorter.BubbleSort,
+            Sorter.MergeSort,
+            Sorter.InsertionSort,
+            Sorter.SelectionSort
+        };
+
+        private static IEnumerable IntSortingTestCases {
+            get {
+                for (int i = 0; i < IntArrays.Length; i++) {
+                    for (int j = 0; j < IntSortingMethods.Length; j++) {
+                        yield return new TestCaseData(IntArrays[i], IntSortingMethods[j])
+                            .SetName("{m}: {0}, " + IntSortingMethods[j].Method.Name)
+                            .SetDescription($"Sorts integers using {IntSortingMethods[j].Method.Name}")
+                            .SetCategory($"{IntSortingMethods[j].Method.Name}")
+                            .SetCategory("Integers");
+                    }
+                }
+            }
+        }
         #endregion
-        
+
         #region Helpers
         private void PrepareTestArrays<T>(T[] dataArray, out T[] sortedArray, out T[] unsortedArray) {
             unsortedArray = new T[dataArray.Length];
