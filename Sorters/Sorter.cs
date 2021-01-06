@@ -19,7 +19,7 @@ namespace Sorters
         public static void SelectionSort<T>(Span<T> span) where T : IComparable<T> {
             for(int i = 0; i < span.Length; i++) {
                 int minIndex = i;
-                for (int j = i + 1; j < span.Length - 1; j++) {
+                for (int j = i + 1; j < span.Length; j++) {
                     if(span[minIndex].CompareTo(span[j]) > 0) {
                         minIndex = j;
                     }
