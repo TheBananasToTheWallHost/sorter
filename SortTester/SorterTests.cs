@@ -73,6 +73,7 @@ namespace SortTester
             yield return Sorter.MergeSort;
             yield return Sorter.InsertionSort;
             yield return Sorter.SelectionSort;
+            yield return Sorter.OptimizedQuickSort;
         }
         #endregion
 
