@@ -74,6 +74,7 @@ namespace SortTester
             yield return Sorter.InsertionSort;
             yield return Sorter.SelectionSort;
             yield return Sorter.OptimizedQuickSort;
+            yield return Sorter.TimSort;
         }
         #endregion
 
