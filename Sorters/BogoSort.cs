@@ -9,7 +9,7 @@ namespace Sorters
 {
     public partial class Sorter
     {
-        public static void BogoSort<T>(Span<T> span) where T : IComparable<T> {
+        public static void RandomBogoSort<T>(Span<T> span) where T : IComparable<T> {
             while (!IsSorted(span)) {
                 Shuffle(span);
             }
@@ -45,12 +45,18 @@ namespace Sorters
                 return;
             }
 
+            
+
             for (int i = 0; i < availableIndices.Count; i++) {
                 int nextValIndex = availableIndices[i];
-                permutation.Add(span[nextValIndex]);
+
+                List<T> permutationCopy = new List<T>(permutation);
+                permutationCopy.Add(span[nextValIndex]);
+
                 List<int> indicesCopy = new List<int>(availableIndices);
                 indicesCopy.RemoveAt(i);
-                Permute(span, indicesCopy, permutation, ref permutationFound);
+                
+                Permute(span, indicesCopy, permutationCopy, ref permutationFound);
             }
         }
 

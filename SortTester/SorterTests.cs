@@ -75,7 +75,7 @@ namespace SortTester
             yield return Sorter.SelectionSort;
             yield return Sorter.OptimizedQuickSort;
             yield return Sorter.TimSort;
-            yield return Sorter.BogoSort;
+            yield return Sorter.RandomBogoSort;
             yield return Sorter.DeterministicBogoSort;
         }
         #endregion
