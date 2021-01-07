@@ -77,6 +77,7 @@ namespace SortTester
             yield return Sorter.TimSort;
             yield return Sorter.RandomBogoSort;
             yield return Sorter.DeterministicBogoSort;
+            yield return Sorter.StoogeSort;
         }
         #endregion
 

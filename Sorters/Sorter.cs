@@ -22,10 +22,6 @@ namespace Sorters
 
         }
 
-        public static void StoogeSort<T>(Span<T> span) where T : IComparable<T> {
-
-        }
-
         public static void TreeSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
