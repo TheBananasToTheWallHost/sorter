@@ -41,7 +41,7 @@ namespace SortTester
         #region Data
         private static object[] IntArrays = {
             new int[] {},
-            new int[] { 1, 5, 3, 6, 7, 34, 2, 121, 34, 76, 5, 4, 32, 87, 6, 5, 9 },
+            new int[] { 1, 5, 6, 7, 34, 2, 121, 34, 76, 5 },
             new int[] { 0, 0, 0, 0, 0},
             new int[] {-2, -10, -50, -2, -1, -9, -13, -12, -1, -5, -23}
         };
@@ -75,6 +75,8 @@ namespace SortTester
             yield return Sorter.SelectionSort;
             yield return Sorter.OptimizedQuickSort;
             yield return Sorter.TimSort;
+            yield return Sorter.BogoSort;
+            yield return Sorter.DeterministicBogoSort;
         }
         #endregion
 

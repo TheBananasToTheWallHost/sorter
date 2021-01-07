@@ -18,7 +18,7 @@ namespace Sorters
 
         }
 
-        public static void BogoSort<T>(Span<T> span) where T : IComparable<T> {
+        public static void SlowSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
 
