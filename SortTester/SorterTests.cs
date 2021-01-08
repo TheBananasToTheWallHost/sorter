@@ -78,6 +78,8 @@ namespace SortTester
             yield return Sorter.RandomBogoSort;
             yield return Sorter.DeterministicBogoSort;
             yield return Sorter.StoogeSort;
+            yield return Sorter.SlowSort;
+            yield return Sorter.ManagedMergeSort;
         }
         #endregion
 

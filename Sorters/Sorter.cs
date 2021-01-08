@@ -12,21 +12,15 @@ namespace Sorters
             get => timSortRunLength;
             set => timSortRunLength = value;
         }
+
+        private static readonly short MAX_STACK_ALLOC_SIZE = 4096;
         #endregion
 
         public static void HeapSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
 
-        public static void SlowSort<T>(Span<T> span) where T : IComparable<T> {
-
-        }
-
         public static void TreeSort<T>(Span<T> span) where T : IComparable<T> {
-
-        }
-
-        public static void BlockSort<T>(Span<T> span) where T : IComparable<T> {
 
         }
     }
