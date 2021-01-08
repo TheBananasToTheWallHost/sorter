@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CSharpExtensions;
+using BananaTurtles.CSharp.Extensions;
 
 namespace Sorters
 {

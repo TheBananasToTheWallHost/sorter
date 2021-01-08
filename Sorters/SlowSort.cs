@@ -1,4 +1,4 @@
-﻿using CSharpExtensions;
+﻿using BananaTurtles.CSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
